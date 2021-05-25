@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
+import 'package:wmcTest/api.dart';
 import 'package:wmc_personalized_plugin/wmc_personalized_plugin.dart';
 
 void main() {
@@ -19,6 +20,8 @@ class _MyAppState extends State<MyApp> {
   String _result = 'Unknown';
   String session;
 
+  AccountApi _accountApi = AccountApi();
+
   @override
   void initState() {
     super.initState();
@@ -27,7 +30,11 @@ class _MyAppState extends State<MyApp> {
      Android ya que por default se envia el codigo de identificador en null en 
      ios no es necesario
      */
-    asyncMethod(); 
+    // asyncMethod();  
+  }
+
+  load() async {
+   await _accountApi.getData();
   }
 
   Future<void> initializeWmc() async {
@@ -50,12 +57,11 @@ class _MyAppState extends State<MyApp> {
     String json = '{\"rqCliente\": {\"nombre\": \"Daniel\",\"apellido\": \"Valverde\",\"identificacion\": \"0924554264\",\"identificaTipo\": \"C\",\"celular\": \"\"},\"login\": \"0924554264\",\"password\": \"Daniel2021.\"}';
 
     while (true){
-      // https://wallet.elrosado.com:5479/api/AcercaDe
-      // https://wallet.elrosado.com:5479/api/Login/Crea
       // await sendPut(session,"https://wallet.elrosado.com:5479/api/Login/Valida",json);
+      // await sendGet(session, "https://wallet.elrosado.com:5479/api/Configuracion");
 
-      await sendGet(session, "https://reqres.in/api/users?page=2");
 
+      // await sendGet(session, "https://reqres.in/api/users?page=2");
       // await sendGet(session, "https://wallet.elrosado.com:5479/api/AcercaDe");
 
       sleep(Duration(seconds: 3));
@@ -112,6 +118,10 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Center(
           child: Text('Running on: $_result\n'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: load,
+          child: Icon(Icons.get_app_rounded),
         ),
       ),
     );
